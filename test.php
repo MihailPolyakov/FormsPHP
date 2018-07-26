@@ -1,5 +1,6 @@
 <?php	if (!empty($_GET)) {
-			$array=[];
+			$array=0;
+			$newarray=[];
 			$test = 0;
 			$int =0;
 			$fl=0;
@@ -17,10 +18,7 @@
 					?>
 
 					<form action="" method="POST">
-        			<?php 
-			        foreach ($array as $key => $value) {
-			        	
-			        
+        			<?php 			        				        
 				        foreach ($array as $key => $value) {
 				        	++$qcount;
 				        	$i = 0;
@@ -28,20 +26,39 @@
 				          <fieldset>
 				            <legend> <?php echo $key ?></legend>
 				            <?php foreach ($value as $asks) {
-				            	  ++$i; ?>
-				            <label><input type="radio" name="q<?php echo $qcount?>" value = "<?php echo $i?>"> <?php echo $asks ?></label>  
-				            <?php }?>
+				            	if (is_array($asks)){		
+					            		foreach ($asks as $value) {	
+					            			++$i;?>			            						 
+				            <label><input type="radio" name="q<?php echo $qcount?>" value = "<?php echo $i?>"> <?php echo $value ?></label>
+
+				            <?php  }
+				            	 } elseif (!is_array($asks)) {
+					            	 $newarray[]=$asks;
+				            	 }
+				            	 
+				            	}?>	  
 				          </fieldset> 
 				        <?php }
-				    }    
-			    }?>
+				    	    
+			    		}?>
 			          <input type="submit" value="Отправить">  
 			      	</form>
 				
 	   <?php } else {
 				echo 'Такого номера теста не существует';
 			}
-		};	
-	echo "<pre>";	
-	print_r($_POST);
-	echo "</pre>";
+		};
+	if (!empty($_POST)){
+	$i=-1;
+	$count=0;	
+
+	foreach ($_POST as $value) {
+		++$i;
+		if ($value == $newarray[$i]) {
+			++$count;
+		}
+	};
+
+	echo 'Правельных ответов' . ' ' . $count;
+	}	
+	
